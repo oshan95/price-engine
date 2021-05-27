@@ -1,7 +1,7 @@
 server:
   port: 8509
   servlet:
-    context-path: /price_engine
+    context-path: /priceengine
   ssl:
     enabled: false
 #  compression:
