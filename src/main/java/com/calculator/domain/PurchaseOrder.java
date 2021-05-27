@@ -6,9 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 
-//@Embeddable
-//@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class PurchaseOrder /*implements Serializable*/ {
+public class PurchaseOrder {
 
     Integer productId;
     Boolean cartonOrder;
