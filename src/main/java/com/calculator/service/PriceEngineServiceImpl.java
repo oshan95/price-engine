@@ -1,5 +1,6 @@
 package com.calculator.service;
 
+import com.calculator.domain.PriceComponent;
 import com.calculator.domain.PurchaseOrder;
 import com.calculator.model.Product;
 import com.calculator.repository.ProductRepository;
@@ -7,9 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @Service
 public class PriceEngineServiceImpl implements PriceEngineService {
@@ -25,7 +24,7 @@ public class PriceEngineServiceImpl implements PriceEngineService {
      * {@link PriceEngineService#getPriceList(Integer)}
      */
     @Override
-    public Map<Integer, Double> getPriceList(final Integer productId) {
+    public List<PriceComponent> getPriceList(final Integer productId) {
         final Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new NoSuchElementException("Product is not found for the product id: " + productId));
 
@@ -37,20 +36,20 @@ public class PriceEngineServiceImpl implements PriceEngineService {
         final Double unitPriceWithoutCarton = unitPriceWithCarton
                 + ( (unitPriceWithCarton * increaseRate) / 100);
 
-        final Map<Integer, Double> priceList = new HashMap<>();
+        final List<PriceComponent> priceList = new ArrayList<>();
 
         for (int i=1; i<51; i++) {
 
             if (i < unitsPerCarton) {
-                priceList.put(i, i*unitPriceWithoutCarton);
+                priceList.add(new PriceComponent(i, i, i*unitPriceWithoutCarton));
             } else if (i % unitsPerCarton == 0) {
-                priceList.put(i, getDiscountedPrice(discountRate, i,i*unitPriceWithCarton, unitsPerCarton));
+                priceList.add(new PriceComponent(i, i, getDiscountedPrice(discountRate, i,i*unitPriceWithCarton, unitsPerCarton)));
             } else if (i % unitsPerCarton > 0) {
                 int extraUnitsExceedsCartonCapacity = i % unitsPerCarton;
                 int unitsWithCarton = i - extraUnitsExceedsCartonCapacity;
                 double amount = (extraUnitsExceedsCartonCapacity * unitPriceWithoutCarton)
                         + (getDiscountedPrice(discountRate, unitsWithCarton,unitsWithCarton * unitPriceWithCarton, unitsPerCarton));
-                priceList.put(i, amount);
+                priceList.add(new PriceComponent(i, i, amount));
             }
         }
 

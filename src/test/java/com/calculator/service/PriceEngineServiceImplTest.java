@@ -1,5 +1,6 @@
 package com.calculator.service;
 
+import com.calculator.domain.PriceComponent;
 import com.calculator.domain.PurchaseOrder;
 import com.calculator.model.Product;
 import com.calculator.repository.ProductRepository;
@@ -41,13 +42,15 @@ public class PriceEngineServiceImplTest {
         final Product product = mockProduct(1, "test1", true, 10, 500);
         when(productRepository.findById(anyInt())).thenReturn(Optional.of(product));
 
-        Map<Integer, Double> list =  priceEngineService.getPriceList(product.getProductId());
+        List<PriceComponent> list =  priceEngineService.getPriceList(product.getProductId());
 
-        assertEquals(list.size(), 50);
-        assertEquals(list.get(1), 65.0);
-        assertEquals(list.get(10), 500.0);
-        assertEquals(list.get(49),2385.0);
-        assertEquals(list.get(50),2250.0);
+        System.out.println(list);
+
+        assertEquals(50, list.size());
+        assertEquals(65.0, list.get(0).getPrice());
+        assertEquals(500.0, list.get(9).getPrice());
+        assertEquals(2385.0, list.get(48).getPrice());
+        assertEquals(2250.0, list.get(49).getPrice());
     }
 
     @Test

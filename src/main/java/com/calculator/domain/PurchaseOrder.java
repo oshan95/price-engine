@@ -1,11 +1,5 @@
 package com.calculator.domain;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
-
-import javax.persistence.Embeddable;
-import java.io.Serializable;
-
 public class PurchaseOrder {
 
     Integer productId;

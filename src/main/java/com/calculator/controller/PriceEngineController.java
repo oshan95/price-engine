@@ -1,5 +1,6 @@
 package com.calculator.controller;
 
+import com.calculator.domain.PriceComponent;
 import com.calculator.domain.PurchaseOrder;
 import com.calculator.service.PriceEngineService;
 import org.springframework.http.HttpStatus;
@@ -7,7 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = {"/calculator"}, produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -22,11 +23,11 @@ public class PriceEngineController {
     }
 
     @GetMapping(value = "/prices")
-    public ResponseEntity<Map<Integer, Double>> getProductPriceList(@RequestParam(value = PRODUCT_ID, required = true) Integer productId) {
+    public ResponseEntity<List<PriceComponent>> getProductPriceList(@RequestParam(value = PRODUCT_ID, required = true) Integer productId) {
         return new ResponseEntity<>(priceEngineService.getPriceList(productId), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/generate")
+    @PostMapping(value = "/generate")
     public ResponseEntity<Double>  generateFinalAmount(@RequestBody PurchaseOrder purchaseOder) {
         return new ResponseEntity<>(priceEngineService.calculateAmount(purchaseOder), HttpStatus.OK);
     }

@@ -1,7 +1,9 @@
 package com.calculator.service;
 
+import com.calculator.domain.PriceComponent;
 import com.calculator.domain.PurchaseOrder;
 
+import java.util.List;
 import java.util.Map;
 
 public interface PriceEngineService {
@@ -9,9 +11,9 @@ public interface PriceEngineService {
     /**
      *
      * @param productId
-     * @return HashMap of price list
+     * @return List of PriceComponents
      */
-    Map<Integer, Double> getPriceList(final Integer productId);
+    List<PriceComponent> getPriceList(final Integer productId);
 
     /**
      *

@@ -1,5 +1,6 @@
 package com.calculator.controller;
 
+import com.calculator.domain.PriceComponent;
 import com.calculator.domain.PurchaseOrder;
 import com.calculator.service.PriceEngineService;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -21,6 +22,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -54,11 +56,11 @@ public class PriceEngineControllerTest {
 
     @Test
     void testGetPriceList() throws Exception {
-        final Map<Integer, Double> priceList = new HashMap<>();
-        priceList.put(1, 2.0);
-        priceList.put(2, 3.0);
-        priceList.put(3, 4.0);
-        priceList.put(4, 5.0);
+        final List<PriceComponent> priceList = new ArrayList<>();
+        priceList.add(new PriceComponent(1,1,2.0));
+        priceList.add(new PriceComponent(2,2,2.0));
+        priceList.add(new PriceComponent(3,3,3.0));
+        priceList.add(new PriceComponent(4,4,4.0));
 
         when(priceEngineService.getPriceList(anyInt())).thenReturn(priceList);
 
@@ -84,7 +86,7 @@ public class PriceEngineControllerTest {
         when(priceEngineService.calculateAmount(any(PurchaseOrder.class))).thenReturn(2344.75);
 
         final MvcResult mvcResult = mockMvc
-                .perform(get(PATH_GENERATE).contentType(MediaType.APPLICATION_JSON_VALUE)
+                .perform(post(PATH_GENERATE).contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(purchaseOrder))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -105,7 +107,7 @@ public class PriceEngineControllerTest {
         when(priceEngineService.calculateAmount(any(PurchaseOrder.class))).thenReturn(2344.75);
 
         final MvcResult mvcResult = mockMvc
-                .perform(get(PATH_GENERATE).contentType(MediaType.APPLICATION_JSON_VALUE)
+                .perform(post(PATH_GENERATE).contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(purchaseOrder))
                 .andExpect(status().isBadRequest())
                 .andReturn();
